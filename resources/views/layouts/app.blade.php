@@ -11,10 +11,15 @@
         <div class="container-fluid shadow-lg header">
             <div class="container">
                 <div class="d-flex justify-content-between">
-                    <h1 class="text-center"><a href="index.html" class="h3 text-white text-decoration-none">Book Review App</a></h1>
+                    <h1 class="text-center"><a href="{{ route('home') }}" class="h3 text-white text-decoration-none">Book Review App</a></h1>
                     <div class="d-flex align-items-center navigation">
-                        <a href="login.html" class="text-white">Login</a>
-                        <a href="register.html" class="text-white ps-2">Register</a>
+                        @if (Auth::check())
+                            <a href="{{ route('account.profile') }}" class="text-white">My Profile</a>
+                        @else
+                            <a href="{{ route('account.login') }}" class="text-white">Login</a>
+                        <a href="{{ route('account.register') }}" class="text-white ps-2">Register</a>
+                        @endif
+                        
                     </div>
                 </div>
             </div>
