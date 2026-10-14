@@ -19,7 +19,7 @@ class AccountController extends Controller
     public function processRegister(Request $request){
         $validator= Validator::make($request->all(),[
             'name' =>'required|min:3',
-            'email' =>'required|email',
+            'email' =>'required|email|unique:users',
             'password' =>'required|confirmed|min:5',
             'password_confirmation' =>'required',
         ]);
@@ -58,8 +58,31 @@ class AccountController extends Controller
         }
     }
 
+    // This method will show user profile page
     public function profile(){
-        return view('account.profile');
+        $user= User::find(Auth::user()->id);
+        // dd($user);
+        return view('account.profile', [
+            'user'=> $user
+        ]);
+    }
+
+    // This method will update user profile
+    public function updateProfile(Request $request){
+        $validator= Validator::make($request->all(),[
+            'name' => 'required|min:3',
+            'email' => 'required|email|unique:users,email,'.Auth::user()->id.',id',
+        ]);
+
+        if($validator->fails()){
+            return redirect()->route('account.profile')->withInput()->withErrors($validator);
+        }
+
+        $user= User::find(Auth::user()->id);
+        $user->name=$request->name;
+        $user->email=$request->email;
+        $user->save();
+        return redirect()->route('account.profile')->with('success', 'Profile Updated Successfully');
     }
 
     public function logout(){
