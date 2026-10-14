@@ -71,8 +71,11 @@
                         </div>
                         <div class="mb-3">
                             <label for="name" class="form-label">Image</label>
-                            <input type="file" name="image" id="image" class="form-control">
-                            <img src="images/profile-img-1.jpg" class="img-fluid mt-4" alt="Luna John" >
+                            <input type="file" name="image" id="image" class="form-control @error('image') is-invalid @enderror">
+                            @error('image')
+                                <p class="invalid-feedback">{{ $message }}</p>
+                            @enderror
+                            {{-- <img src="images/profile-img-1.jpg" class="img-fluid mt-4" alt="Luna John" > --}}
                         </div>   
                         <button class="btn btn-primary mt-2">Update</button>
                         </form>                     

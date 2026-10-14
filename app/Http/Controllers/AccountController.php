@@ -69,10 +69,16 @@ class AccountController extends Controller
 
     // This method will update user profile
     public function updateProfile(Request $request){
-        $validator= Validator::make($request->all(),[
+        $rules = [
             'name' => 'required|min:3',
             'email' => 'required|email|unique:users,email,'.Auth::user()->id.',id',
-        ]);
+        ];
+
+        if(!empty($request->image)){
+            $rules['image']='image';
+        }
+
+        $validator= Validator::make($request->all(),$rules);
 
         if($validator->fails()){
             return redirect()->route('account.profile')->withInput()->withErrors($validator);
@@ -82,6 +88,13 @@ class AccountController extends Controller
         $user->name=$request->name;
         $user->email=$request->email;
         $user->save();
+
+        // Here we will upload image
+        $image = $request->name;
+        $ext = $image->getClientOriginalExtension();
+        $imageName =time().'.'.$ext;
+        
+
         return redirect()->route('account.profile')->with('success', 'Profile Updated Successfully');
     }
 
