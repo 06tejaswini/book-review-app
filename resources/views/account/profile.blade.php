@@ -10,7 +10,10 @@
                     </div>
                     <div class="card-body">
                         <div class="text-center mb-3">
-                            <img src="images/profile-img-1.jpg" class="img-fluid rounded-circle" alt="Luna John">                            
+                            @if (Auth::user()->image!="")
+                                <img src="{{ asset('uploads/profile/thumb/'.Auth::user()->image) }}" class="img-fluid rounded-circle" alt="Luna John">   
+                            @endif
+                                                     
                         </div>
                         <div class="h5 text-center">
                             <strong>{{ Auth::user()->name }}</strong>
@@ -53,7 +56,7 @@
                         Profile
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('account.updateProfile') }}" method="post">
+                        <form action="{{ route('account.updateProfile') }}" method="post" enctype="multipart/form-data">
                             @csrf
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
@@ -75,6 +78,9 @@
                             @error('image')
                                 <p class="invalid-feedback">{{ $message }}</p>
                             @enderror
+                            @if (Auth::user()->image !="")
+                                <img src="{{ asset('uploads/profile/thumb/'.Auth::user()->image) }}" class="img-fluid mt-4" alt="">  
+                            @endif
                             {{-- <img src="images/profile-img-1.jpg" class="img-fluid mt-4" alt="Luna John" > --}}
                         </div>   
                         <button class="btn btn-primary mt-2">Update</button>

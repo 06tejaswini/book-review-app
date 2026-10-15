@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class AccountController extends Controller
 {
@@ -90,10 +93,46 @@ class AccountController extends Controller
         $user->save();
 
         // Here we will upload image
-        $image = $request->name;
-        $ext = $image->getClientOriginalExtension();
-        $imageName =time().'.'.$ext;
+                
+       
         
+        if ($request->hasFile('image')) { 
+
+            // Delete old image here
+            File::delete(public_path('uploads/profile/'.$user->image));
+            File::delete(public_path('uploads/profile/thumb/'.$user->image));
+
+            $image = $request->file('image');
+
+            $ext = strtolower($image->getClientOriginalExtension());
+            $imageName = time() . '.' . $ext;
+
+            $uploadPath = public_path('uploads/profile');
+
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0755, true);
+            }
+
+            // Save the original uploaded image
+            $image->move($uploadPath, $imageName);
+
+            $user->image = $imageName;
+            $user->save();
+
+            // Resize using Intervention Image v3 and GD
+            $manager = new ImageManager(new Driver());
+
+            $img = $manager->read($uploadPath . '/' . $imageName);
+            $img->cover(150, 150);
+
+            $thumbPath = $uploadPath . '/thumb';
+
+            if (!file_exists($thumbPath)) {
+                mkdir($thumbPath, 0755, true);
+            }
+
+            $img->save($thumbPath . '/' . $imageName);
+        }
 
         return redirect()->route('account.profile')->with('success', 'Profile Updated Successfully');
     }
