@@ -2,11 +2,11 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');                         
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
 
 Route::group(['prefix'=>'account'], function(){
     Route::group(['middleware'=>'guest'], function(){
@@ -25,7 +25,7 @@ Route::group(['prefix'=>'account'], function(){
         Route::post('books', [BookController::class,'store'])->name('books.store');
         Route::get('books/edit/{id}', [BookController::class,'edit'])->name('books.edit');
         Route::post('books/edit/{id}', [BookController::class,'update'])->name('books.update');
-        Route::post('books', [BookController::class,'destroy'])->name('books.destroy');
+        Route::delete('books', [BookController::class,'destroy'])->name('books.destroy');
 
-    });
+    });  
 });

@@ -101,19 +101,34 @@
     </div>
 @endsection
 
+
 @section('script')
-    <script>
-        function deleteBook($id){
-            if(confirm("Are you sure you want to delete?")) {
-                $.ajax({
-                    url:'{{ route("books.destroy") }}',
-                    type:'delete',
-                    data: {id:id},
-                    success:function(response){
+<script>
+    function deleteBook(id) {
+        if (confirm("Are you sure you want to delete?")) {
+            $.ajax({
+                url: '{{ route("books.destroy") }}',
+                type: 'DELETE',
+                data: {
+                    id: id
+                },
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.status) {
                         window.location.href = '{{ route("books.index") }}';
+                    } else {
+                        alert(response.message);
                     }
-                });
-            }
+                },
+                error: function(xhr) {
+                    console.log(xhr.responseText);
+                    alert("Something went wrong while deleting the book.");
+                }
+            });
         }
-    </script>
+    }
+</script>
 @endsection
+
