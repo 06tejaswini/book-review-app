@@ -100,9 +100,17 @@
                                 <div class="d-flex justify-content-between">
                                     <h3>Reviews</h3>
                                     <div>
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                                             Add Review
                                           </button>
+                                        @if (Auth::check())
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                            Add Review
+                                        </button>
+                                        @else
+                                        <a href="{{ route('account.login') }}" class="btn btn-primary">Add Review</a>
+                                            
+                                        @endif
                                           
                                     </div>
                                 </div>                        
@@ -227,8 +235,8 @@
                     <h1 class="modal-title fs-5" id="staticBackdropLabel">Add Review for <strong>Atomic Habits</strong></h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <form action="" id="bookReviewForm" name="bookReviewForm">
                 <div class="modal-body">
-                    <form action="">
                         <div class="mb-3">
                             <label for="" class="form-label">Review</label>
                             <textarea name="review" id="review" class="form-control" cols="5" rows="5" placeholder="Review"></textarea>
@@ -237,19 +245,28 @@
                             <label for=""  class="form-label">Rating</label>
                             <select name="rating" id="rating" class="form-control">
                                 <option value="1">1</option>
-                                <option value="">2</option>
-                                <option value="">3</option>
-                                <option value="">4</option>
-                                <option value="">5</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
                             </select>
                         </div>
-                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
+                </form>
             </div>
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script>
+        $("#bookReviewForm").submit(function(e){
+            e.preventDefault();
+            
+        })
+    </script>
 @endsection
