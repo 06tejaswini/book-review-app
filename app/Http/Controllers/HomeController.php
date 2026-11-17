@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
 {
@@ -32,5 +35,46 @@ class HomeController extends Controller
             'book'=>$book,
             'relatedBooks'=>$relatedBooks
         ]);
+    }
+
+    // This method will save review in DB
+    public function saveReview(Request $request){
+        $validator= Validator::make($request->all(),[
+            'review' =>'required|min:10',
+            'rating' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                'status'=>false,
+                'errors' => [
+                'review' => 'The review field is required.'
+                ]
+            ]);
+        }
+
+        // Apply condition here
+
+        $countReview = Review::where('user_id',Auth::user()->id)->where('book_id',$request->book_id)->count();
+
+        if($countReview > 0){
+            session()->flash('error','You already submitted a review');
+            return response()->json([
+                'status' =>true,
+            ]);
+        }
+
+        $review= new Review();
+        $review->review = $request->review;
+        $review->rating = $request->rating;
+        $review->user_id = Auth::user()->id;
+        $review->book_id = $request->book_id;
+        $review->save();
+
+        session()->flash('success','Review submitted successfully');
+
+        return response()->json([
+                'status'=>true
+            ]);
     }
 } 
