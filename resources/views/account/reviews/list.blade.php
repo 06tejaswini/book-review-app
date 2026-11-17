@@ -7,7 +7,7 @@
                 @include('layouts.sidebar')              
             </div>
             <div class="col-md-9">
-                
+                @include('layouts.message')
                 <div class="card border-0 shadow">
                     <div class="card-header  text-white">
                         My Reviews
@@ -41,14 +41,14 @@
                                         <td>{{ $review->rating }}</td>
                                         <td>{{ \Carbon\Carbon::parse($review->created_at)->format('d M, Y') }}</td>
                                         <td>    
-                                            @if ($review->success == 1)
+                                            @if ($review->status == 1)
                                                 <span class="text-success">Active</span>
                                             @else
                                                 <span class="text-danger">Block</span>
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="edit-review.html" class="btn btn-primary btn-sm"><i class="fa-regular fa-pen-to-square"></i>
+                                            <a href="{{ route('account.reviews.edit',$review->id) }}" class="btn btn-primary btn-sm"><i class="fa-regular fa-pen-to-square"></i>
                                             </a>
                                             <a href="#" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
                                         </td>
