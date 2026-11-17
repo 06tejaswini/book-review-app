@@ -1,10 +1,32 @@
-                        <ul class="nav flex-column">
+ <div class="card border-0 shadow-lg">
+                    <div class="card-header  text-white">
+                        Welcome, {{ Auth::user()->name }}                      
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            @if (Auth::user()->image!="")
+                                <img src="{{ asset('uploads/profile/thumb/'.Auth::user()->image) }}" class="img-fluid rounded-circle" alt="Luna John">   
+                            @endif
+                                                     
+                        </div>
+                        <div class="h5 text-center">
+                            <strong>{{ Auth::user()->name }}</strong>
+                            <p class="h6 mt-2 text-muted">5 Reviews</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card border-0 shadow-lg mt-3">
+                    <div class="card-header  text-white">
+                        Navigation
+                    </div>
+                    <div class="card-body sidebar">
+                                                <ul class="nav flex-column">
                             @if (Auth::user()->role=='admin')
                             <li class="nav-item">
                                 <a href="{{ route('books.index') }}">Books</a>                               
                             </li>
                             <li class="nav-item">
-                                <a href="reviews.html">Reviews</a>                               
+                                <a href="{{ route('account.reviews') }}">Reviews</a>                               
                             </li>
                             @endif
                 
@@ -21,3 +43,5 @@
                                 <a href="{{ route('account.logout') }}">Logout</a>
                             </li>                           
                         </ul>
+                    </div>
+                </div>
