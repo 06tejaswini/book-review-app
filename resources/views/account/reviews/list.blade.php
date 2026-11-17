@@ -12,73 +12,55 @@
                     <div class="card-header  text-white">
                         My Reviews
                     </div>
-                    <div class="card-body pb-0">            
+                    <div class="card-body pb-0"> 
+                        <div class="d-flex justify-content-end">
+                            <form action="" method="get">
+                                <div class="d-flex">
+                                    <input type="text" class="form-control" value="{{ Request::get('keyword') }}" name="keyword" placeholder="keyword">
+                                    <button type="submit" class="btn btn-primary ms-2">Search</button>
+                                    <a href="{{ route('account.reviews') }}" class="btn btn-secondary ms-1">Clear</a>
+                                </div>
+                            </form>
+                        </div>           
                         <table class="table  table-striped mt-3">
                             <thead class="table-dark">
                                 <tr>
-                                    <th>Book</th>
                                     <th>Review</th>
+                                    <th>Book</th>
                                     <th>Rating</th>
+                                    <th>Created At</th>
                                     <th>Status</th>                                  
-                                    <th width="100">Action</th>
+                                    <th width="100">Action</th> 
                                 </tr>
                                 <tbody>
-                                    <tr>
-                                        <td>Atomic Habits</td>
-                                        <td>This seems an excellent book to read.</td>                                        
-                                        <td>3.0</td>
-                                        <td>Active</td>
+                                    @if ($reviews->isNotEmpty())
+                                        @foreach ($reviews as $review)
+                                            <tr>
+                                        <td>{{ $review->review }}<br/> <strong>{{ $review->user->name }}</strong> </td>     
+                                        <td>{{ $review->book->title }}</td>                                   
+                                        <td>{{ $review->rating }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($review->created_at)->format('d M, Y') }}</td>
+                                        <td>    
+                                            @if ($review->success == 1)
+                                                <span class="text-success">Active</span>
+                                            @else
+                                                <span class="text-danger">Block</span>
+                                            @endif
+                                        </td>
                                         <td>
                                             <a href="edit-review.html" class="btn btn-primary btn-sm"><i class="fa-regular fa-pen-to-square"></i>
                                             </a>
                                             <a href="#" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>Atomic Habits</td>
-                                        <td>This seems an excellent book to read.</td>                                        
-                                        <td>3.0</td>
-                                        <td>Active</td>
-                                        <td>
-                                            <a href="edit-review.html" class="btn btn-primary btn-sm"><i class="fa-regular fa-pen-to-square"></i>
-                                            </a>
-                                            <a href="#" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Atomic Habits</td>
-                                        <td>This seems an excellent book to read.</td>                                       
-                                        <td>3.0</td>
-                                        <td>Active</td>
-                                        <td>
-                                            <a href="edit-review.html" class="btn btn-primary btn-sm"><i class="fa-regular fa-pen-to-square"></i>
-                                            </a>
-                                            <a href="#" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Atomic Habits</td>
-                                        <td>This seems an excellent book to read.</td>                                        
-                                        <td>3.0</td>
-                                        <td>Active</td>
-                                        <td>
-                                            <a href="edit-review.html" class="btn btn-primary btn-sm"><i class="fa-regular fa-pen-to-square"></i>
-                                            </a>
-                                            <a href="#" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
-                                        </td>
-                                    </tr>                                   
+                                        @endforeach
+                                        
+                                    @endif
+
                                 </tbody>
                             </thead>
                         </table>   
-                        <nav aria-label="Page navigation " >
-                            <ul class="pagination">
-                              <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                              <li class="page-item"><a class="page-link" href="#">1</a></li>
-                              <li class="page-item"><a class="page-link" href="#">2</a></li>
-                              <li class="page-item"><a class="page-link" href="#">3</a></li>
-                              <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                            </ul>
-                          </nav>                  
+                        {{ $reviews->links() }}               
                     </div>
                     
                 </div>                
