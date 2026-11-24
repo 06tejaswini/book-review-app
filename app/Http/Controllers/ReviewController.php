@@ -51,4 +51,27 @@ class ReviewController extends Controller
         return redirect()->route('account.reviews');
 
     }
+
+    // This method will delete the data  from database
+    public function deleteReview(Request $request){
+        $id= $request ->id;
+        $review = Review::find($id);
+        
+        if($review == null){
+            session()->flash('error','Review Not Found');
+            return response()->json([
+                'status' => false
+            ]);                            
+        }else{
+            $review->delete();
+
+            session()->flash('success', 'Review deleted successfully');
+            return response()->json([
+                'status'=>true
+            ]);
+        }
+
+    }
 }
+
+  
